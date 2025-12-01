@@ -7,7 +7,7 @@ export function validateJsonBody(schema: Joi.ObjectSchema) {
     if (!req.body) {
       req.body = {};
     }
-    let { error } = schema.validate(req.body, { abortEarly: false });
+    let { error } = schema.validate(req.body, { abortEarly: false , noDefaults: false , });
     if (error) {
       throw Exception.get({
         feature: AppErrorCodes.validations,

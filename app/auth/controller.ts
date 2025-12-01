@@ -17,7 +17,7 @@ export class AuthController {
   signIn = async (req: Request, res: Response, next: NextFunction) => {
     let { email, password } = req.body;
     let user = await this.userService.getUserByEmail(email);
-    if (!user || ! await comparePassword(user?.password || "", password)) {
+    if (!user || !(await comparePassword(user?.password || "", password))) {
       throw Exception.get({
         feature: AppErrorCodes.auth,
         code: AuthErrors.InvalidCredentials,

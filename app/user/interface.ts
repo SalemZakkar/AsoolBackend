@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { PhoneNumber } from "../common";
 
 export interface IUser {
-  _id?: mongoose.Types.ObjectId;
+  _id?: mongoose.ObjectId;
   name: string;
   phone?: PhoneNumber | undefined;
   email: string;

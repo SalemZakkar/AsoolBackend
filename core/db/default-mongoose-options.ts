@@ -1,10 +1,10 @@
 import mongoose, { SchemaOptions } from "mongoose";
 
-export function initDB() {
-  mongoose.connect(process.env.DBURL!).then(() => {
-    console.log("Connected To DB");
-  });
-}
+// export function initDB() {
+//   mongoose.connect(process.env.DBURL!).then(() => {
+//     console.log("Connected To DB");
+//   });
+// }
 
 interface Params {
   hideToJson?: string[];

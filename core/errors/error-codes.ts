@@ -4,6 +4,7 @@ enum AppErrorCodes {
   database = "03",
   validations = "04",
   system = "05",
+  otp = "06"
 }
 
 export { AppErrorCodes };

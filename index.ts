@@ -1,11 +1,12 @@
-import {  initDB, notFoundHandler } from "./core";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
+import { mongoConnect, notFoundHandler } from "./core";
+
 import express from "express";
 import { errorMiddleWare } from "./core";
 import * as qs from "qs";
 import { appRouterV1 } from "./app/router";
-initDB();
+mongoConnect(process.env.DBURL!);
 let app = express();
 
 app.set("query parser", (str: string) => qs.parse(str));

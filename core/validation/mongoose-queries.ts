@@ -9,14 +9,14 @@ let numericOperators = Joi.object({
   gte: Joi.number(),
   gt: Joi.number(),
   lt: Joi.number(),
-});
+}).unknown(false);
 
 let stringOperators = Joi.object({
   eq: Joi.string(),
   ne: Joi.string(),
   in: Joi.array().items(Joi.string()),
   nin: Joi.array().items(Joi.string()),
-});
+}).unknown(false);
 
 export const numberQueryValidator = Joi.alternatives().try(
   numericOperators,
@@ -26,3 +26,14 @@ export const stringQueryValidator = Joi.alternatives().try(
   stringOperators,
   Joi.string()
 );
+
+export const paginationJoiObject = {
+  total: Joi.boolean(),
+  data: Joi.boolean(),
+  skip: Joi.number().min(0),
+  limit: Joi.number().max(100).min(1),
+};
+
+export const paginationJoiSchema = Joi.object({
+  ...paginationJoiObject,
+}).unknown(false);
