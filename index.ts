@@ -26,7 +26,7 @@ app.use(express.json());
 
 app.use("/api/v1", appRouterV1);
 
-app.use("/ping", (res: Response) => {
+app.use("/ping", (req , res) => {
     res.status(200).json({message: "Pong"});
 });
 
@@ -36,7 +36,7 @@ app.use(errorMiddleWare);
 
 app.listen(process.env.PORT, () => {
     console.log("Server is running on 3000");
-    let url = "https://asoolbackend.onrender.com/ping";
+    let url = "http://localhost:3000/ping";
     setInterval(() => {
         let req = https.get(url, () => {
             req.end()
