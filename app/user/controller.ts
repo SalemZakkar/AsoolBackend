@@ -54,7 +54,7 @@ export class UserController {
                 reason: OtpReason.VerifyEmail,
             },);
             let user = await this.service.update(userId, {isEmailVerified: true}, session);
-            await this.otpService.deleteOtp(userId, session);
+            await this.otpService.deleteOtp(vid, session);
             sendSuccessResponse({
                 res: res,
                 data: user,
