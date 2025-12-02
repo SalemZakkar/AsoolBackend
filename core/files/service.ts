@@ -12,7 +12,10 @@ export class FileService {
             throw Exception.get({feature: AppErrorCodes.file, code: FileErrors.NoFile});
         }
         let name = uuidv4();
-        let p = path.join("/uploads/", name);
+        let p = path.join(process.env.STORE!, name);
+        if (!fs.existsSync(process.env.STORE!)) {
+            fs.mkdirSync(process.env.STORE!, {recursive: true});
+        }
         fs.writeFileSync(p, file.buffer);
         const fileData: AppFile = {
             fileName: name,

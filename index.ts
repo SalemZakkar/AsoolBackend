@@ -1,13 +1,10 @@
 import dotenv from "dotenv";
-
 dotenv.config({path: "./.env"});
 import {mongoConnect, notFoundHandler} from "./core";
 import express from "express";
 import {errorMiddleWare} from "./app/common";
 import qs from "qs";
 import {appRouterV1} from "./app/router";
-import {Response} from "express";
-import * as https from "node:https";
 
 require("./app/firebase");
 
@@ -37,9 +34,11 @@ app.use(errorMiddleWare);
 app.listen(process.env.PORT, () => {
     console.log("Server is running on 3000");
     let url = "https://asoolbackend.onrender.com/ping";
-    setInterval(() => {
-        let req = https.get(url, () => {
-            req.end()
-        });
+    setInterval(async () => {
+        try {
+            await fetch("https://asoolbackend.onrender.com/ping");
+        } catch (err) {
+            console.error(err);
+        }
     }, 30 * 1000)
 });

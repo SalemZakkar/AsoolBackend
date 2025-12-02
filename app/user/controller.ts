@@ -150,7 +150,7 @@ export class UserController {
 
     setGoogleAccount = async (req: Request, res: Response) => {
         let {token} = req.body;
-        let decoded = await firebaseApp.auth().verifyIdToken(token)
+        let decoded = await firebaseApp().auth().verifyIdToken(token)
         let userId = (req as any).userId;
         let user = await this.service.update(userId, {firebaseId: decoded.uid});
         sendSuccessResponse({res: res, data: user});

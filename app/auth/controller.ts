@@ -101,11 +101,11 @@ export class AuthController {
 
     signInFirebase = async (req: Request, res: Response) => {
         let {token} = req.body;
-        let decoded = await firebaseApp.auth().verifyIdToken(token)
+        let decoded = await firebaseApp().auth().verifyIdToken(token)
 
         let user = await this.userService.getUserByFirebaseId(decoded.uid);
         if (!user) {
-            let googleAccount = await firebaseApp.auth().getUser(decoded.uid);
+            let googleAccount = await firebaseApp().auth().getUser(decoded.uid);
             let email = googleAccount.email;
             user = await this.userService.createAccount({
                 email: email!,

@@ -1,7 +1,9 @@
 import admin from "firebase-admin";
 
-let firebaseApp = admin.initializeApp({
-    credential: admin.credential.cert("/etc/secrets/asool-key.json"),
-});
+function firebaseApp() {
+    return admin.initializeApp({
+        credential: admin.credential.cert(process.env.FIREBASE!),
+    });
+}
 
 export {firebaseApp};
