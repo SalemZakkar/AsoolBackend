@@ -51,13 +51,8 @@ schemaOtp.methods.canSend = function () {
 };
 
 schemaOtp.pre("save", async function (next) {
-
-    if (process.env.env ==  "live") {
-        next();
-        return;
-    }
+    console.log(process.env.env);
     const isNewDoc = this.isNew;
-
     const otpChanged = this.isModified("otp");
     if (isNewDoc || otpChanged) {
         const user = await mongoose
@@ -66,7 +61,7 @@ schemaOtp.pre("save", async function (next) {
             .select("email");
 
         if (user?.email) {
-            await sendSmtpOtp(this.otp, user.email);
+            sendSmtpOtp(this.otp, user.email).then(e => console.log("Send Otp"));
         }
     }
     next();
