@@ -36,7 +36,7 @@ app.use(errorMiddleWare);
 
 app.listen(process.env.PORT, () => {
     console.log("Server is running on 3000");
-    let url = "http://localhost:3000/ping";
+    let url = "https://asoolbackend.onrender.com/ping";
     setInterval(() => {
         let req = https.get(url, () => {
             req.end()
