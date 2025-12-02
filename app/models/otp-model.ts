@@ -51,7 +51,7 @@ schemaOtp.methods.canSend = function () {
 };
 
 schemaOtp.pre("save", async function (next) {
-    console.log(process.env.env);
+    console.log(process.env.ENVIRONMENT);
     const isNewDoc = this.isNew;
     const otpChanged = this.isModified("otp");
     if (isNewDoc || otpChanged) {
