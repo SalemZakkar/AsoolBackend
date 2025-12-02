@@ -22,7 +22,7 @@ export class OtpService {
                 sent: true,
                 otp: await OtpModel.insertOne({
                     attempts: 1,
-                    otp: process.env.env == "dev" ? "123456" : generateNumericString(6),
+                    otp: process.env.env == "live" ? "123456" : generateNumericString(6),
                     reason: reason,
                     user: user,
                 }),
@@ -40,7 +40,7 @@ export class OtpService {
             otp.attempts++;
         }
         otp.createdAt = new Date();
-        otp.otp = process.env.env == "dev" ? "123456" : generateNumericString(6);
+        otp.otp = process.env.env == "live" ? "123456" : generateNumericString(6);
         await otp.save();
         return {
             sent: true,
