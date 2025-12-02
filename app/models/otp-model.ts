@@ -56,6 +56,7 @@ schemaOtp.pre("save", async function (next) {
         return;
     }
     const isNewDoc = this.isNew;
+
     const otpChanged = this.isModified("otp");
     if (isNewDoc || otpChanged) {
         const user = await mongoose
