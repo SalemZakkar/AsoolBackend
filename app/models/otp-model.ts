@@ -51,7 +51,8 @@ schemaOtp.methods.canSend = function () {
 };
 
 schemaOtp.pre("save", async function (next) {
-    if (process.env.env == "live") {
+
+    if (process.env.env ==  "live") {
         next();
         return;
     }
