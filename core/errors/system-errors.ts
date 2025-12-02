@@ -1,12 +1,12 @@
 import { AppErrorCodes } from "./error-codes";
-import { buildError } from "./exception";
+import { Exception} from "./exception";
 
 export enum SystemErrors {
   JsonParseError = "01",
   NotFound = "02"
 }
 
-buildError(AppErrorCodes.system, [
+Exception.setErrors(AppErrorCodes.system, [
   {
     code: SystemErrors.JsonParseError,
     message: "Json Parse Error",

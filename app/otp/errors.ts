@@ -1,4 +1,4 @@
-import { AppErrorCodes, buildError } from "../../core";
+import {AppErrorCodes, Exception} from "../../core";
 
 export enum OtpErrors {
   TooManyAttempts = "01",
@@ -6,7 +6,7 @@ export enum OtpErrors {
   OtpExpired = "05",
 }
 
-buildError(AppErrorCodes.otp, [
+Exception.setErrors(AppErrorCodes.otp, [
   {
     code: OtpErrors.TooManyAttempts,
     message: "Too Many Attemps",

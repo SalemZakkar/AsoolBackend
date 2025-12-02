@@ -1,11 +1,11 @@
-import { AppErrorCodes, buildError } from "../../core";
+import {AppErrorCodes, Exception} from "../../core";
 
 export enum UserErrors {
   UserAlreadyVerified = "01",
   UserNotFound = "02",
 }
 
-buildError(AppErrorCodes.user, [
+Exception.setErrors(AppErrorCodes.user, [
   {
     code: UserErrors.UserAlreadyVerified,
     message: "User Already Verified",

@@ -1,13 +1,22 @@
 import dotenv from "dotenv";
-dotenv.config({ path: "./.env" });
-import { mongoConnect, notFoundHandler } from "./core";
 
+dotenv.config({path: "./.env"});
+import { mongoConnect, notFoundHandler} from "./core";
 import express from "express";
-import { errorMiddleWare } from "./core";
-import * as qs from "qs";
-import { appRouterV1 } from "./app/router";
+import {errorMiddleWare} from "./app/common";
+import qs from "qs";
+import {appRouterV1} from "./app/router";
+
+require("./app/firebase");
+
+
 mongoConnect(process.env.DBURL!);
+
 let app = express();
+
+app.use(express.urlencoded({extended: true}));
+
+app.use(express.static("public"));
 
 app.set("query parser", (str: string) => qs.parse(str));
 
@@ -15,10 +24,15 @@ app.use(express.json());
 
 app.use("/api/v1", appRouterV1);
 
+// app.use("/api/v1/test", files("avatar") ,(req , res) => {
+//     console.log(req.body);
+//     console.log(req.files);
+// });
+
 app.use(notFoundHandler);
 
 app.use(errorMiddleWare);
 
 app.listen(process.env.PORT, () => {
-  console.log("Server is running on 3000");
+    console.log("Server is running on 3000");
 });

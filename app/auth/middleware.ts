@@ -11,14 +11,14 @@ export const protection = async function (
   if (!authHeader) {
     throw Exception.get({
       feature: AppErrorCodes.auth,
-      code: AuthErrors.UNAUTH,
+      code: AuthErrors.UnAuth,
     });
   }
   const parts = authHeader.split(" ");
   if (parts.length !== 2 || parts[0] !== "Bearer") {
     throw Exception.get({
       feature: AppErrorCodes.auth,
-      code: AuthErrors.UNAUTH,
+      code: AuthErrors.UnAuth,
     });
   }
 
@@ -29,7 +29,7 @@ export const protection = async function (
   if (decoded.hasError) {
     throw Exception.get({
       feature: AppErrorCodes.auth,
-      code: AuthErrors.UNAUTH,
+      code: AuthErrors.UnAuth,
     });
   }
 

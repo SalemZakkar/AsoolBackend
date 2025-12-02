@@ -1,3 +1,3 @@
-// files
-// firebase
-// html for fancy
+//clean up
+//upload to render
+//admin routes

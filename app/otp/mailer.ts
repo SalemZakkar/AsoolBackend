@@ -10,7 +10,7 @@ export async function sendSmtpOtp(otp: string, email: string) {
       pass: smtpPassword,
     },
   });
-  m.sendMail({
+  await m.sendMail({
     to: email,
     subject: "Otp",
     text: `Your OTP code is: ${otp}`,
