@@ -1,20 +1,19 @@
-import { AppErrorCodes } from "./error-codes";
-import { Exception} from "./exception";
+import {Exception} from "./exception";
 
-export enum SystemErrors {
-  JsonParseError = "01",
-  NotFound = "02"
+
+export class SystemJsonError extends Exception {
+    constructor(args?: any) {
+        super("Json Parse Error", 400, "System_Json_Error", args);
+    }
 }
 
-Exception.setErrors(AppErrorCodes.system, [
-  {
-    code: SystemErrors.JsonParseError,
-    message: "Json Parse Error",
-    statusCode: 400,
-  },
-    {
-    code: SystemErrors.NotFound,
-    message: "Not Found",
-    statusCode: 404,
-  },
+export class SystemNotFoundError extends Exception {
+    constructor(args?: any) {
+        super("Not Found", 404, "System_Not_Found", args);
+    }
+}
+
+Exception.addErrors("System", [
+    new SystemNotFoundError(),
+    new SystemJsonError(),
 ]);

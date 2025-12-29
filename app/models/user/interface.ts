@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {PhoneNumber} from "../common";
+import {PhoneNumber} from "../../common";
 
 export interface IUser {
     _id?: mongoose.ObjectId;
@@ -11,6 +11,7 @@ export interface IUser {
     firebaseId?: string;
     isEmailVerified?: boolean;
     role: UserRole
+    ability: any;
 }
 
 export interface UserUpdateFields {

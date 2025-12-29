@@ -1,25 +1,25 @@
-import {AppErrorCodes, Exception} from "../../core";
+import { Exception } from "../../core";
 
-export enum OtpErrors {
-  TooManyAttempts = "01",
-  WrongOtp = "02",
-  OtpExpired = "05",
+export class OtpTooManyAttemptsError extends Exception {
+  constructor() {
+    super("Too Many Attemps", 429, "Otp_Too_Many_Attempts");
+  }
 }
 
-Exception.setErrors(AppErrorCodes.otp, [
-  {
-    code: OtpErrors.TooManyAttempts,
-    message: "Too Many Attemps",
-    statusCode: 429,
-  },
-  {
-    code: OtpErrors.WrongOtp,
-    message: "Otp Code Error",
-    statusCode: 400,
-  },
-  {
-    code: OtpErrors.OtpExpired,
-    message: "Otp expired",
-    statusCode: 400,
-  },
+export class OtpWrongOtpError extends Exception {
+  constructor() {
+    super("Otp Code Error", 400, "Otp_Wrong_Code");
+  }
+}
+
+export class OtpExpiredError extends Exception {
+  constructor() {
+    super("Otp expired", 400, "Otp_Expired");
+  }
+}
+
+Exception.addErrors("OTP", [
+  new OtpTooManyAttemptsError(),
+  new OtpWrongOtpError(),
+  new OtpExpiredError(),
 ]);

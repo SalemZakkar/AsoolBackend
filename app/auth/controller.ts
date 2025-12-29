@@ -1,17 +1,19 @@
 import {Request, Response} from "express";
-import {UserRole, UserService} from "../user";
+import { UserService} from "../user";
 import {
-    AppErrorCodes,
     comparePassword,
     decodeToken,
-    Exception,
     hashPassword,
     sendSuccessResponse,
     signToken,
 } from "../../core";
-import {AuthErrors} from "./errors";
+import {
+    AuthInvalidCredentialsError, AuthPasswordMismatchError,
+    AuthRefreshTokenExpiredError, AuthRefreshTokenWrongError
+} from "./errors";
 import {AuthSignUpInput} from "./interface";
 import {firebaseApp} from "../firebase";
+import { UserRole } from "../models";
 
 export class AuthController {
     private userService = new UserService();
@@ -19,10 +21,8 @@ export class AuthController {
         let {email, password} = req.body;
         let user = await this.userService.getUserByEmail(email);
         if (!user || !(await comparePassword(user?.password || "", password))) {
-            throw Exception.get({
-                feature: AppErrorCodes.auth,
-                code: AuthErrors.InvalidCredentials,
-            });
+            throw new AuthInvalidCredentialsError();
+
         }
 
         let token = signToken({params: {userId: user._id}, expires: "1d"});
@@ -41,10 +41,7 @@ export class AuthController {
     signUp = async (req: Request, res: Response) => {
         let input: AuthSignUpInput = req.body;
         if (input.confirmPassword != input.password) {
-            throw Exception.get({
-                feature: AppErrorCodes.auth,
-                code: AuthErrors.PasswordMismatch,
-            });
+            throw new AuthPasswordMismatchError();
         }
         input.password = await hashPassword(input.password, 10);
         let user = await this.userService.createAccount({
@@ -71,16 +68,10 @@ export class AuthController {
         let {refreshToken} = req.body;
         let result = decodeToken(refreshToken, process.env.JWTREFRESH!);
         if (result.isExpired) {
-            throw Exception.get({
-                feature: AppErrorCodes.auth,
-                code: AuthErrors.RefreshTokenExpired,
-            });
+            throw new AuthRefreshTokenExpiredError();
         }
         if (result.isWrong) {
-            throw Exception.get({
-                feature: AppErrorCodes.auth,
-                code: AuthErrors.RefreshTokenWrong,
-            });
+            throw new AuthRefreshTokenWrongError();
         }
         let userId = result.data.userId;
 

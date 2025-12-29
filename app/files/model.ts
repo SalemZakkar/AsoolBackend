@@ -2,8 +2,8 @@ import mongoose, {Schema} from "mongoose";
 
 export interface AppFile {
     fileName: string;
-    path: string;
     mimetype: string;
+    buffer: Buffer;
 }
 
 let fileSchema = new Schema<AppFile>({
@@ -11,14 +11,14 @@ let fileSchema = new Schema<AppFile>({
         type: String,
         required: true
     },
-    path: {
-        type: String,
-        required: true
-    },
     mimetype: {
         type: String,
         required: true
     },
+    buffer: {
+        type: Buffer,
+        required: true
+    }
 });
 
 export const FileModel = mongoose.model("File", fileSchema);

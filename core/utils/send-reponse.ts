@@ -16,8 +16,8 @@ export function sendSuccessResponse({
   res.status(200).json({
     message: message,
     total: total,
-    ...rest,
     data: data,
+    ...rest,
   });
 }
 

@@ -1,20 +1,19 @@
-import {AppErrorCodes, Exception} from "../../core";
+import { Exception } from "../../core";
 
-export enum FirebaseErrors {
-    WrongToken = "01",
-    TokenExpired = "02"
+
+export class FirebaseWrongTokenError extends Exception {
+  constructor() {
+    super("Firebase Token Wrong", 400, "Firebase_Wrong_Token");
+  }
 }
 
-Exception.setErrors(AppErrorCodes.firebase, [
-    {
-        code: FirebaseErrors.WrongToken,
-        message: "Firebase Token Wrong",
-        statusCode: 400
-    },
-    {
-        code: FirebaseErrors.TokenExpired,
-        message: "Firebase Token Expired",
-        statusCode: 419
-    },
-])
+export class FirebaseTokenExpiredError extends Exception {
+  constructor() {
+    super("Firebase Token Expired", 419, "Firebase_Token_Expired");
+  }
+}
 
+Exception.addErrors("FIREBASE", [
+  new FirebaseTokenExpiredError(),
+  new FirebaseWrongTokenError(),
+]);

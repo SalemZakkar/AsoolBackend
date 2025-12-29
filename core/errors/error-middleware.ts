@@ -1,15 +1,15 @@
-import {Response} from "express";
-import {AppErrorCodes, Exception, SystemErrors} from ".";
+import express from "express";
+import {SystemNotFoundError} from "./system-errors";
+import {Exception} from "./exception";
 
 export function getAppErrorsApi(
-    res: Response,
+    req: express.Request,
+    res: express.Response,
 ) {
-    res.status(200).json({data: Exception.getErrors()});
+    const responseData = Object.fromEntries(Exception.getErrorsAsMap());
+    res.status(200).json(responseData);
 }
 
 export function notFoundHandler() {
-    throw Exception.get({
-        feature: AppErrorCodes.system,
-        code: SystemErrors.NotFound,
-    });
+    throw new SystemNotFoundError();
 }

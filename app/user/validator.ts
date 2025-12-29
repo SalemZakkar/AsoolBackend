@@ -1,6 +1,7 @@
 import Joi from "joi";
-import {paginationJoiObject, stringQueryValidator, fileValidator} from "../../core";
-import {UserRole} from "./interface";
+import {paginationJoiObject, stringQueryValidator} from "../../core";
+import {UserRole} from "../models/user/interface";
+import { fileValidator } from "../files";
 
 export const userUpdateValidator = Joi.object({
     name: Joi.string(),
@@ -14,7 +15,7 @@ export const userUpdateValidator = Joi.object({
     email: Joi.string().email(),
     isEmailVerified: Joi.boolean(),
     role: Joi.string().valid(...Object.values(UserRole)),
-    avatar: fileValidator(10 * 1024 * 8, ["image/jpeg", "image/png", "image/jpg"]),
+    avatar: fileValidator(10 * 1024 * 1000, ["image/jpeg", "image/png", "image/jpg"]),
     // firebaseId: Joi.string(),
 }).unknown(false);
 
@@ -27,7 +28,7 @@ export const userUpdateMineValidator = Joi.object({
         }).and("code", "phone"),
         Joi.valid(null)
     ),
-    avatar: fileValidator(10 * 1024 * 8, ["image/jpeg", "image/png", "image/jpg"]),
+    avatar: fileValidator(10 * 1024 * 1000, ["image/jpeg", "image/png", "image/jpg"]).allow(null),
 }).unknown(false);
 
 export const userGetValidator = Joi.object({
@@ -66,6 +67,6 @@ export const userChangePasswordValidator = Joi.object({
         .valid(Joi.ref("password")),
 }).unknown(false);
 
-export const userAvatarFileValidator = Joi.object({
-    avatar: fileValidator(10 * 1024 * 8, ["image/jpeg", "image/png"])
-})
+// export const userAvatarFileValidator = Joi.object({
+//     avatar: fileValidator(10 * 1024 * 8, ["image/jpeg", "image/png"])
+// })

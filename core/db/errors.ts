@@ -1,19 +1,18 @@
-import {AppErrorCodes, Exception} from "../errors";
+import {Exception} from "../errors";
 
-export enum DatabaseErrors {
-    Duplication = "01",
-    CastError = "02",
+export class DBDuplicationError extends Exception {
+    constructor(args?: any) {
+        super("Duplication Conflict", 409, "DB_Duplication", args);
+    }
 }
 
-Exception.setErrors(AppErrorCodes.database, [
-    {
-        code: DatabaseErrors.Duplication,
-        message: "Duplication Conflict",
-        statusCode: 409,
-    },
-    {
-        code: DatabaseErrors.CastError,
-        message: "Cast Error",
-        statusCode: 400,
-    },
-]);
+export class DBCastError extends Exception {
+    constructor(args?: any) {
+        super("Database Cast Error", 400, "DB_Cast_Error", args);
+    }
+}
+
+Exception.addErrors("DB" , [
+    new DBDuplicationError(),
+    new DBCastError(),
+])

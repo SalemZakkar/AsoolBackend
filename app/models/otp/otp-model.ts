@@ -1,7 +1,7 @@
 import mongoose, {model, Schema} from "mongoose";
-import {Otp, OtpInstanceFunctions, OtpReason} from "../otp/interface";
-import {otpAge, otpAttempts, otpMaxAttempts} from "../otp/constants";
-import {sendSmtpOtp} from "../otp/mailer";
+import {Otp, OtpInstanceFunctions, OtpReason} from "./interface";
+import {otpAge, otpAttempts, otpMaxAttempts} from "../../otp/constants";
+import {sendSmtpOtp} from "../../otp/mailer";
 
 let schemaOtp = new Schema<Otp, {}, OtpInstanceFunctions, {}>({
     attempts: {

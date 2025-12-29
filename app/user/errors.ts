@@ -1,19 +1,19 @@
-import {AppErrorCodes, Exception} from "../../core";
+import { Exception } from "../../core";
 
-export enum UserErrors {
-  UserAlreadyVerified = "01",
-  UserNotFound = "02",
+
+export class UserAlreadyVerifiedError extends Exception {
+  constructor() {
+    super("User Already Verified", 400, "User_Already_Verified");
+  }
 }
 
-Exception.setErrors(AppErrorCodes.user, [
-  {
-    code: UserErrors.UserAlreadyVerified,
-    message: "User Already Verified",
-    statusCode: 400,
-  },
-  {
-    code: UserErrors.UserNotFound,
-    message: "User Not Found",
-    statusCode: 404,
-  },
+export class UserNotFoundError extends Exception {
+  constructor() {
+    super("User Not Found", 404, "User_Not_Found");
+  }
+}
+
+Exception.addErrors("USER", [
+  new UserAlreadyVerifiedError(),
+  new UserNotFoundError(),
 ]);

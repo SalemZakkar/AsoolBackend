@@ -1,5 +1,5 @@
 import mongoose, {ClientSession} from "mongoose";
-import {IUser, UserUpdateFields} from "./interface";
+import {IUser, UserUpdateFields} from "../models/user/interface";
 import {UserModel} from "../models";
 import {MongooseQuery} from "../../core/";
 import {hashPassword} from "../../core";

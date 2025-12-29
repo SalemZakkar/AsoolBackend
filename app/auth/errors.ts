@@ -1,43 +1,46 @@
-import {AppErrorCodes, Exception} from "../../core";
+import { Exception } from "../../core";
 
-export enum AuthErrors {
-    InvalidCredentials = "01",
-    PasswordMismatch = "02",
-    UnAuth = "03",
-    JwtExpired = "04",
-    RefreshTokenWrong = "05",
-    RefreshTokenExpired = "06",
+export class AuthInvalidCredentialsError extends Exception {
+  constructor() {
+    super("Invalid email or password", 400, "Auth_Invalid_Credentials");
+  }
 }
 
-Exception.setErrors(AppErrorCodes.auth, [
-    {
-        code: AuthErrors.InvalidCredentials,
-        message: "Invalid email or password",
-        statusCode: 400,
-    },
-    {
-        code: AuthErrors.PasswordMismatch,
-        message: "passwords are not same.",
-        statusCode: 400,
-    },
-    {
-        code: AuthErrors.UnAuth,
-        message: "UnAuthenticated.",
-        statusCode: 401,
-    },
-    {
-        code: AuthErrors.JwtExpired,
-        message: "Token Expired.",
-        statusCode: 419,
-    },
-    {
-        code: AuthErrors.RefreshTokenWrong,
-        message: "Wrong RefreshToken.",
-        statusCode: 400,
-    },
-    {
-        code: AuthErrors.RefreshTokenExpired,
-        message: "RefreshToken Expired.",
-        statusCode: 419,
-    },
+export class AuthPasswordMismatchError extends Exception {
+  constructor() {
+    super("passwords are not same.", 400, "Auth_Password_Mismatch");
+  }
+}
+
+export class AuthUnAuthError extends Exception {
+  constructor() {
+    super("UnAuthenticated.", 401, "Auth_Unauthenticated");
+  }
+}
+
+export class AuthJwtExpiredError extends Exception {
+  constructor() {
+    super("Token Expired.", 419, "Auth_Jwt_Expired");
+  }
+}
+
+export class AuthRefreshTokenWrongError extends Exception {
+  constructor() {
+    super("Wrong RefreshToken.", 400, "Auth_Refresh_Token_Wrong");
+  }
+}
+
+export class AuthRefreshTokenExpiredError extends Exception {
+  constructor() {
+    super("RefreshToken Expired.", 419, "Auth_Refresh_Token_Expired");
+  }
+}
+
+Exception.addErrors("AUTH", [
+  new AuthInvalidCredentialsError(),
+  new AuthPasswordMismatchError(),
+  new AuthUnAuthError(),
+  new AuthJwtExpiredError(),
+  new AuthRefreshTokenWrongError(),
+  new AuthRefreshTokenExpiredError(),
 ]);

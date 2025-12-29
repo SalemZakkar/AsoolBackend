@@ -1,12 +1,32 @@
-import {AppErrorCodes} from "./error-codes";
+class ErrorRecord {
+    table!: Map<string, Exception[]>;
+
+    constructor() {
+        this.table = new Map<string, Exception[]>();
+    }
+
+    getErrorsMap() {
+        return this.table;
+    }
+
+    addErrors(code: string, error: Exception[]) {
+        this.table.set(code, error.map(e => ({...e, appError: undefined})));
+    }
+
+    // getErrorsAsList() {
+    //     return Array.from(this.table.values()).flat();
+    // }
+}
+
+let errorRecord = new ErrorRecord();
+
 
 export class Exception {
     message!: string;
     statusCode!: number;
     code!: string;
     args?: any;
-    public appError? = true;
-    private static table = new Map<string, Exception>();
+    public appError?: boolean | undefined = true;
 
 
     constructor(message: string, statusCode: number, code: string, args?: any) {
@@ -17,38 +37,11 @@ export class Exception {
         this.appError = true;
     }
 
-    static setErrors(feature: string, errors: Exception[]) {
-        errors.forEach((e) => {
-            this.table.set(feature + e.code, {
-                code: feature + e.code,
-                message: e.message,
-                statusCode: e.statusCode,
-                args: e.args,
-            })
-        });
+    static getErrorsAsMap() {
+        return errorRecord.getErrorsMap();
     }
 
-    static get({
-                   feature,
-                   code,
-                   customMessage,
-                   args,
-               }: {
-        feature: AppErrorCodes;
-        code: string;
-        customMessage?: string;
-        args?: any;
-    }): Exception {
-        let exception = this.table.get(feature + code) as Exception;
-        return new Exception(
-            customMessage || exception.message,
-            exception.statusCode,
-            feature + code,
-            args || exception.args
-        );
-    }
-
-    static getErrors(): Exception[] {
-        return Array.from(this.table.values());
+    static addErrors(code: string, error: Exception[]) {
+        errorRecord.addErrors(code, error);
     }
 }

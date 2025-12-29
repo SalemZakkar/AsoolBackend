@@ -12,6 +12,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@casl/ability": "^6.7.5",
+    "@casl/mongoose": "^8.0.3",
     "@types/uuid": "^10.0.0",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",

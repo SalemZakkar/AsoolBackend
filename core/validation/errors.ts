@@ -1,15 +1,12 @@
-import {AppErrorCodes, Exception} from "../errors";
+import {Exception} from "../errors";
 
-export enum ValidationError {
-  WrongInput = "01",
+
+export class ValidationWrongInputError extends Exception {
+    constructor(args?: any) {
+        super("Validation Wrong Input Error", 400, "Validation_Wrong_Input_Error", args);
+    }
 }
 
-Exception.setErrors(AppErrorCodes.validations, [
-  {
-    code: ValidationError.WrongInput,
-    message: "Request Validation Error.",
-    statusCode: 400,
-  },
-]);
-
-
+Exception.addErrors("Validation", [
+    new ValidationWrongInputError(),
+])

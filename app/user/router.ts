@@ -1,116 +1,101 @@
-import {Router} from "express";
-import {protection} from "../auth/middleware";
-import {UserController} from "./controller";
-import {validateJsonBody, validateJsonQuery} from "../../core";
+import { protection } from "../common";
+import { Router } from "express";
+import { UserController } from "./controller";
+import { multerFiles, validateJsonBody, validateJsonQuery } from "../../core";
 import {
-    userChangePasswordValidator,
-    userGetValidator,
-    userOtpSendValidator,
-    userResetPasswordValidator,
-    userUpdateMineValidator,
-    userUpdateValidator,
-    userVerifyEmail,
+  userChangePasswordValidator,
+  userGetValidator,
+  userOtpSendValidator,
+  userResetPasswordValidator,
+  userUpdateMineValidator,
+  userUpdateValidator,
+  userVerifyEmail,
 } from "./validator";
-import {files} from "../../core";
-import {firebaseTokenValidator} from "../common";
+import { firebaseTokenValidator } from "../common";
+import { permissionMiddleWare } from "../access";
 
 let userRouter = Router();
 
 let userController = new UserController();
 
-userRouter.get("/mine", protection,
-    userController.getMine,
+userRouter.get("/mine", protection, userController.getMine);
+
+userRouter.patch(
+  "/mine",
+  protection,
+  multerFiles("avatar"),
+  validateJsonBody(userUpdateMineValidator),
+  userController.updateMine
 );
 
 userRouter.patch(
-    "/mine",
-    protection,
-    files("avatar"),
-    validateJsonBody(userUpdateMineValidator),
-    userController.updateMine
+  "/mine/changeEmail",
+  protection,
+  validateJsonBody(userOtpSendValidator),
+  userController.changeUserEmail
+);
+userRouter.post(
+  "/mine/verifyEmail",
+  protection,
+  validateJsonBody(userVerifyEmail),
+  userController.verifyEmail
+);
+
+userRouter.post(
+  "/mine/forgotPassword",
+  validateJsonBody(userOtpSendValidator),
+  userController.forgetPassword
+);
+
+userRouter.post(
+  "/mine/resetPassword",
+  validateJsonBody(userResetPasswordValidator),
+  userController.resetPassword
+);
+
+userRouter.post(
+  "/mine/changePassword",
+  protection,
+  validateJsonBody(userChangePasswordValidator),
+  userController.changePassword
 );
 
 userRouter.patch(
-    "/mine/changeEmail",
-    protection,
-    validateJsonBody(userOtpSendValidator),
-    userController.changeUserEmail
+  "/mine/googleAccount",
+  protection,
+  validateJsonBody(firebaseTokenValidator),
+  userController.setGoogleAccount
 );
 
 userRouter.delete(
-    "/mine/avatar",
-    protection,
-    userController.deleteMinePhoto
+  "/mine/googleAccount",
+  protection,
+  userController.unlinkGoogleAccount
 );
 
 userRouter.post(
-    "/mine/verifyEmail",
-    protection,
-    validateJsonBody(userVerifyEmail),
-    userController.verifyEmail
-);
-
-userRouter.post(
-    "/mine/forgotPassword",
-    validateJsonBody(userOtpSendValidator),
-    userController.forgetPassword
-);
-
-userRouter.post(
-    "/mine/resetPassword",
-    validateJsonBody(userResetPasswordValidator),
-    userController.resetPassword
-);
-
-userRouter.post(
-    "/mine/changePassword",
-    protection,
-    validateJsonBody(userChangePasswordValidator),
-    userController.changePassword
-);
-
-userRouter.patch("/mine/googleAccount", protection,
-    validateJsonBody(firebaseTokenValidator),
-    userController.setGoogleAccount,
-);
-
-userRouter.delete(
-    "/mine/googleAccount",
-    protection,
-    userController.unlinkGoogleAccount
-);
-
-userRouter.post("/mine/sendEmailOtp", protection,
-    userController.sendEmailVerifyOtp,
-);
-
-
-userRouter.get(
-    "/",
-    protection,
-    validateJsonQuery(userGetValidator),
-    userController.getByCriteria
-);
-
-userRouter.patch(
-    "/:id",
-    protection,
-    files("avatar"),
-    validateJsonBody(userUpdateValidator),
-    userController.updateUser
+  "/mine/sendEmailOtp",
+  protection,
+  userController.sendEmailVerifyOtp
 );
 
 userRouter.get(
-    "/:id",
-    protection,
-    userController.getUserById,
+  "/",
+  protection,
+  permissionMiddleWare("manage", "user"),
+  validateJsonQuery(userGetValidator),
+  userController.getByCriteria
 );
 
-userRouter.delete(
-    "/avatar/:id",
-    protection,
-    userController.deleteUserPhoto,
+userRouter.patch(
+  "/:id",
+  protection,
+  permissionMiddleWare("manage", "user"),
+  multerFiles("avatar"),
+  validateJsonBody(userUpdateValidator),
+  userController.updateUser
 );
 
+userRouter.get("/:id", protection, userController.getUserById);
 
-export {userRouter};
+export { userRouter };

@@ -2,10 +2,8 @@
   "compilerOptions": {
     "module": "nodenext",
     "target": "esnext",
-    "types": [
-      "node",
-      "mongodb"
-    ],
+   "types": ["node", "express", "multer"],
+    "typeRoots": ["./node_modules/@types", "./app/types" , "./core/types"],
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
