@@ -1,6 +1,6 @@
 import {model, Schema} from "mongoose";
 import {defaultDbOptions} from "../../../core";
-import { IUser, UserRole } from "..";
+import { IUser, UserRole } from "./interface";
 
 let userSchema = new Schema<IUser>(
     {

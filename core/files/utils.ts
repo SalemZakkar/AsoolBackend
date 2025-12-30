@@ -41,3 +41,14 @@ export function getFilesByFieldName(req: Request | any, fieldName: string): Expr
     }
     return [];
 }
+
+
+export function fileNeedAction(x: any) : boolean {
+    if(x == null || x === null){
+        return true;
+    }
+    if(!(x==undefined || x===undefined)){
+        return true;
+    }
+    return false;
+} 

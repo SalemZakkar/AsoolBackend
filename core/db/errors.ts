@@ -12,7 +12,14 @@ export class DBCastError extends Exception {
     }
 }
 
+export class DBNotFoundError extends Exception {
+    constructor(args?: any) {
+        super("Not Found", 404, "DB_Not_Found_Error", args);
+    }
+}
+
 Exception.addErrors("DB" , [
     new DBDuplicationError(),
     new DBCastError(),
+    new DBNotFoundError(),
 ])

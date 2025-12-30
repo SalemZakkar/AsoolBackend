@@ -13,7 +13,14 @@ export class UserNotFoundError extends Exception {
   }
 }
 
+export class UserEmailInUserError extends Exception {
+  constructor(){
+    super("Email is used" , 400 , "User_Email_Used");
+  }
+}
+
 Exception.addErrors("USER", [
   new UserAlreadyVerifiedError(),
   new UserNotFoundError(),
+  new UserEmailInUserError(),
 ]);

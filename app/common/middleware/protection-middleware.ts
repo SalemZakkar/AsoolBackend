@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {decodeToken,} from "../../../core";
-import {AuthUnAuthError} from "../../auth";
-import { IUser, UserModel } from "../../models";
+import {AuthUnAuthError} from "../../auth/errors";
+import mongoose from "mongoose";
 
 export const protection = async function (
     req: Request,
@@ -22,11 +22,11 @@ export const protection = async function (
     if (decoded.hasError) {
         throw new AuthUnAuthError();
     }
-    let user = await UserModel.findById(decoded.data.userId);
+    let user = await mongoose.model("User").findById(decoded.data.userId);
     if(!user){
         throw new AuthUnAuthError();
     }
     req.userId = user.id;
-    req.user = user as IUser;
+    req.user = user;
     next();
 };

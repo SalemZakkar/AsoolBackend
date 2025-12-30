@@ -1,4 +1,3 @@
-import { protection } from "../common";
 import { Router } from "express";
 import { UserController } from "./controller";
 import { multerFiles, validateJsonBody, validateJsonQuery } from "../../core";
@@ -12,7 +11,9 @@ import {
   userVerifyEmail,
 } from "./validator";
 import { firebaseTokenValidator } from "../common";
-import { permissionMiddleWare } from "../access";
+import { permissionMiddleWare } from "../common";
+import { protection } from "../common";
+import { UserAction } from "./abilities";
 
 let userRouter = Router();
 
@@ -28,12 +29,7 @@ userRouter.patch(
   userController.updateMine
 );
 
-userRouter.patch(
-  "/mine/changeEmail",
-  protection,
-  validateJsonBody(userOtpSendValidator),
-  userController.changeUserEmail
-);
+
 userRouter.post(
   "/mine/verifyEmail",
   protection,
@@ -82,7 +78,7 @@ userRouter.post(
 userRouter.get(
   "/",
   protection,
-  permissionMiddleWare("manage", "user"),
+  permissionMiddleWare(UserAction.manage, "user"),
   validateJsonQuery(userGetValidator),
   userController.getByCriteria
 );
@@ -90,7 +86,7 @@ userRouter.get(
 userRouter.patch(
   "/:id",
   protection,
-  permissionMiddleWare("manage", "user"),
+  permissionMiddleWare(UserAction.manage, "user"),
   multerFiles("avatar"),
   validateJsonBody(userUpdateValidator),
   userController.updateUser

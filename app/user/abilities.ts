@@ -3,11 +3,15 @@ import { UserRole } from "../models";
 
 const subject = "user";
 
+export enum UserAction {
+  manage = "Manage",
+}
+
 let permissions: AccessConfig = {
   [UserRole.admin]: (user) => [
     {
       subject: subject,
-      action: "manage",
+      action: UserAction.manage,
     },
   ],
 };
