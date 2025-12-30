@@ -5,6 +5,10 @@ import {
   sendSuccessResponse,
 } from "../../core";
 import { CategoryService, SubCategoryService } from "./service";
+import {
+  applyLocalization,
+  localizeConditions,
+} from "../common/utils/localization";
 
 export class CategoryController {
   service = new CategoryService();
@@ -41,10 +45,16 @@ export class CategoryController {
   };
 
   getAllCategories = async (req: Request, res: Response) => {
-    let queries = getQueries(req.query, false , ["id"]);
+    let queries = getQueries(req.query, false, ["id"]);
+    queries.conditions = localizeConditions(
+      req.language,
+      queries.conditions,
+      "name"
+    );
+
     sendSuccessResponse({
       res: res,
-      data: await this.service.getAll(queries),
+      data: applyLocalization(await this.service.getAll(queries), req.language),
     });
   };
 
@@ -80,10 +90,18 @@ export class CategoryController {
   };
 
   getAllSubCategories = async (req: Request, res: Response) => {
-    let queries = getQueries(req.query, false , ["id" , "category"]);
+    let queries = getQueries(req.query, false, ["id", "category"]);
+    queries.conditions = localizeConditions(
+      req.language,
+      queries.conditions,
+      "name"
+    );
     sendSuccessResponse({
       res: res,
-      data: await this.subCategoryService.getAll(queries),
+      data: applyLocalization(
+        await this.subCategoryService.getAll(queries),
+        req.language
+      ),
     });
   };
 }

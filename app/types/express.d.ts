@@ -8,6 +8,7 @@ declare global {
         | import("mongoose").ObjectId
         | null;
       user: IUser | null | undefined;
+      language: string
     }
   }
 }

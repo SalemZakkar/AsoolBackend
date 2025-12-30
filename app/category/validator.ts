@@ -1,9 +1,10 @@
 import Joi from "joi";
 import { fileValidator } from "../files";
+import { localizedStringValidator } from "../common";
 
 export class CategoryValidator {
   createValidator = Joi.object({
-    name: Joi.string().required(),
+    name: localizedStringValidator.required(),
     image: fileValidator(10 * 1024 * 1000, [
       "image/png",
       "image/jpeg",
@@ -12,7 +13,7 @@ export class CategoryValidator {
   }).unknown(false);
 
   editValidator = Joi.object({
-    name: Joi.string(),
+    name: localizedStringValidator,
     image: fileValidator(10 * 1024 * 1000, [
       "image/png",
       "image/jpeg",
@@ -27,7 +28,7 @@ export class CategoryValidator {
 
 export class SubCategoryValidator {
   createValidator = Joi.object({
-    name: Joi.string().required(),
+    name: localizedStringValidator.required(),
     image: fileValidator(10 * 1024 * 1000, [
       "image/png",
       "image/jpeg",
@@ -37,7 +38,7 @@ export class SubCategoryValidator {
   }).unknown(false);
 
   editValidator = Joi.object({
-    name: Joi.string(),
+    name: localizedStringValidator,
     image: fileValidator(10 * 1024 * 1000, [
       "image/png",
       "image/jpeg",

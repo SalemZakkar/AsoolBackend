@@ -4,6 +4,7 @@ import { CategoryValidator, SubCategoryValidator } from "./validator";
 import { multerFiles, validateJsonBody, validateJsonQuery } from "../../core";
 import { permissionMiddleWare, protection } from "../common";
 import { CategoryActions } from "./abilities";
+import { localizedFieldsMiddleware } from "../common";
 
 let categoryRouter = Router();
 
@@ -23,6 +24,7 @@ categoryRouter.post(
   permissionMiddleWare(CategoryActions.create, "Category"),
   multerFiles("image"),
   validateJsonBody(validator.createValidator),
+  localizedFieldsMiddleware("name"),
   controller.createCategory
 );
 
@@ -32,6 +34,7 @@ categoryRouter.patch(
   permissionMiddleWare(CategoryActions.edit, "Category"),
   multerFiles("image"),
   validateJsonBody(validator.editValidator),
+  localizedFieldsMiddleware("name"),
   controller.editCategory
 );
 
@@ -54,6 +57,7 @@ categoryRouter.post(
   permissionMiddleWare(CategoryActions.create, "Category"),
   multerFiles("image"),
   validateJsonBody(subCategoryValidator.createValidator),
+  localizedFieldsMiddleware("name"),
   controller.createSubCategory
 );
 
@@ -63,6 +67,7 @@ categoryRouter.patch(
   permissionMiddleWare(CategoryActions.edit, "Category"),
   multerFiles("image"),
   validateJsonBody(subCategoryValidator.editValidator),
+  localizedFieldsMiddleware("name"),
   controller.editSubCategory
 );
 

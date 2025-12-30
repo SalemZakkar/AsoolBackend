@@ -1,6 +1,7 @@
 import mongoose, { model, Schema } from "mongoose";
 import { SubCategory } from "./interface";
 import { defaultDbOptions } from "../../../core";
+import { LocalizationSchema } from "../common/localization-schema";
 
 let schema = new Schema<SubCategory>(
   {
@@ -8,10 +9,7 @@ let schema = new Schema<SubCategory>(
       type: mongoose.Types.ObjectId,
       ref: "File",
     },
-    name: {
-      type: String,
-      req: true,
-    },
+    name: LocalizationSchema,
     category: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
