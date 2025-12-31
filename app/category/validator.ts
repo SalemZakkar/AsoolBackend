@@ -23,6 +23,7 @@ export class CategoryValidator {
 
   getValidator = Joi.object({
     name: Joi.string(),
+    id: Joi.string(),
   }).unknown(false);
 }
 
@@ -49,5 +50,6 @@ export class SubCategoryValidator {
   getValidator = Joi.object({
     name: Joi.string(),
     category: Joi.string(),
+    id: Joi.string()
   }).unknown(false);
 }

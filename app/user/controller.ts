@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UserService } from "./service";
 import {
   getFilesByFieldName,
-  getQueries,
+  getMongooseQueries,
   sendSuccessResponse,
 } from "../../core";
 import { UserUpdateFields } from "../models/user/interface";
@@ -76,7 +76,15 @@ export class UserController {
     sendSuccessResponse({ res: res, data: result });
   };
   getByCriteria = async (req: Request, res: Response) => {
-    let query = getQueries(req.query);
+    let query = getMongooseQueries({
+      query: req.query,
+      options: {
+        id: {
+          raw: true,
+          newName: "_id",
+        },
+      },
+    });
     let result = await this.service.getUserByCriteria(query);
     sendSuccessResponse({ res: res, ...result });
   };

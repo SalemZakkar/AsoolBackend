@@ -15,8 +15,9 @@ export const userUpdateValidator = Joi.object({
     email: Joi.string().email(),
     isEmailVerified: Joi.boolean(),
     role: Joi.string().valid(...Object.values(UserRole)),
-    avatar: fileValidator(10 * 1024 * 1000, ["image/jpeg", "image/png", "image/jpg"]),
-    // firebaseId: Joi.string(),
+    avatar: fileValidator(10 * 1024 * 1000, ["image/jpeg", "image/png", "image/jpg"]).allow(null),
+    password: Joi.string(),
+    firebaseId: Joi.string(),
 }).unknown(false);
 
 export const userUpdateMineValidator = Joi.object({

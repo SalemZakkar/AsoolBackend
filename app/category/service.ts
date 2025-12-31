@@ -12,15 +12,13 @@ export class CategoryService {
     let { name, file } = params;
 
     return executeWithTransaction(async (session) => {
-      return (
-        await CategoryModel.insertOne(
-          {
-            image: (await this.fileService.saveFile(file, session))?._id,
-            name: name,
-          },
-          { session: session }
-        )
-      )._id;
+      return await CategoryModel.insertOne(
+        {
+          image: (await this.fileService.saveFile(file, session))?._id,
+          name: name,
+        },
+        { session: session }
+      );
     });
   };
 
@@ -29,7 +27,7 @@ export class CategoryService {
 
     let old = await CategoryModel.findByIdIfExists(id);
     return executeWithTransaction(async (session) => {
-      return (await CategoryModel.findByIdAndUpdate(
+      return await CategoryModel.findByIdAndUpdate(
         id,
         {
           image: await this.fileService.processSingleFileSwitch(
@@ -39,8 +37,8 @@ export class CategoryService {
           ),
           name: name,
         },
-        { session: session }
-      ))!._id;
+        { new: true, session: session }
+      );
     });
   };
 
@@ -67,16 +65,14 @@ export class SubCategoryService {
       if (!k) {
         throw new DBNotFoundError();
       }
-      return (
-        await SubCategoryModel.insertOne(
-          {
-            image: (await this.fileService.saveFile(file, session))?._id,
-            name: name,
-            category: category,
-          },
-          { session: session }
-        )
-      )._id;
+      return await SubCategoryModel.insertOne(
+        {
+          image: (await this.fileService.saveFile(file, session))?._id,
+          name: name,
+          category: category,
+        },
+        { session: session }
+      );
     });
   };
 
@@ -84,7 +80,7 @@ export class SubCategoryService {
     let { id, name, file } = params;
     let old = await SubCategoryModel.findByIdIfExists(id);
     return executeWithTransaction(async (session) => {
-      return (await SubCategoryModel.findByIdAndUpdate(
+      return await SubCategoryModel.findByIdAndUpdate(
         id,
         {
           image: await this.fileService.processSingleFileSwitch(
@@ -94,8 +90,8 @@ export class SubCategoryService {
           ),
           name: name,
         },
-        { session: session }
-      ))!._id;
+        { new: true, session: session }
+      );
     });
   };
 

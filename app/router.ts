@@ -4,6 +4,7 @@ import { userRouter } from "./user";
 import { getAppErrorsApi } from "../core";
 import { fileRouter } from "./files";
 import { categoryRouter } from "./category/router";
+import { storeRouter } from "./store";
 
 let appRouterV1 = Router();
 
@@ -12,6 +13,8 @@ appRouterV1.use("/auth", authRouter);
 appRouterV1.use("/user", userRouter);
 
 appRouterV1.use("/category", categoryRouter);
+
+appRouterV1.use("/store", storeRouter);
 
 appRouterV1.use("/file", fileRouter);
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
   getFilesByFieldName,
-  getQueries,
+  getMongooseQueries,
   sendSuccessResponse,
 } from "../../core";
 import { CategoryService, SubCategoryService } from "./service";
@@ -45,7 +45,16 @@ export class CategoryController {
   };
 
   getAllCategories = async (req: Request, res: Response) => {
-    let queries = getQueries(req.query, false, ["id"]);
+    let queries = getMongooseQueries({
+      query: req.query,
+      pagination: false,
+      options: {
+        id: {
+          raw: true,
+          newName: "_id",
+        },
+      },
+    });
     queries.conditions = localizeConditions(
       req.language,
       queries.conditions,
@@ -54,7 +63,7 @@ export class CategoryController {
 
     sendSuccessResponse({
       res: res,
-      data: applyLocalization(await this.service.getAll(queries), req.language),
+      data: await this.service.getAll(queries),
     });
   };
 
@@ -90,7 +99,19 @@ export class CategoryController {
   };
 
   getAllSubCategories = async (req: Request, res: Response) => {
-    let queries = getQueries(req.query, false, ["id", "category"]);
+    let queries = getMongooseQueries({
+      query: req.query,
+      pagination: false,
+      options: {
+        id: {
+          raw: true,
+          newName: "_id",
+        },
+        category: {
+          raw: true,
+        },
+      },
+    });
     queries.conditions = localizeConditions(
       req.language,
       queries.conditions,
@@ -98,10 +119,7 @@ export class CategoryController {
     );
     sendSuccessResponse({
       res: res,
-      data: applyLocalization(
-        await this.subCategoryService.getAll(queries),
-        req.language
-      ),
+      data: await this.subCategoryService.getAll(queries),
     });
   };
 }

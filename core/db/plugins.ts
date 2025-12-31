@@ -18,6 +18,7 @@ export const findAndCount = function (schema: mongoose.Schema, options: any) {
     if (params.data) {
       queries.push(
         this.find(params.conditions ?? {})
+          .sort(params.sort)
           .skip(params.skip)
           .limit(params.limit)
       );

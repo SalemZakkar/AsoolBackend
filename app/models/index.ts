@@ -6,3 +6,5 @@ export * from "./otp/otp-model";
 export * from "./category/sub-category-model";
 export * from "./category/category-model";
 export * from "./category/interface";
+export * from "./store/interface";
+export * from "./store/store-model";
