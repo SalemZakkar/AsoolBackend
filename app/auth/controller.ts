@@ -21,7 +21,12 @@ export class AuthController {
   private userService = new UserService();
   signIn = async (req: Request, res: Response) => {
     let { email, password } = req.body;
-    let user = await this.userService.getUser({ email: email });
+    let user;
+    try {
+      user = await this.userService.getUser({ email: email });
+    } catch (e) {
+      throw new AuthInvalidCredentialsError();
+    }
     if (!user || !(await comparePassword(user?.password || "", password))) {
       throw new AuthInvalidCredentialsError();
     }
@@ -81,7 +86,7 @@ export class AuthController {
       key: process.env.JWTREFRESH!,
       expires: "30d",
     });
-    let user = await this.userService.getUser({_id: userId});
+    let user = await this.userService.getUser({ _id: userId });
     sendSuccessResponse({
       res: res,
       accessToken: token,
@@ -94,7 +99,7 @@ export class AuthController {
     let { token } = req.body;
     let decoded = await firebaseApp().auth().verifyIdToken(token);
 
-    let user = await this.userService.getUser({firebaseId: decoded.uid});
+    let user = await this.userService.getUser({ firebaseId: decoded.uid });
     if (!user) {
       let googleAccount = await firebaseApp().auth().getUser(decoded.uid);
       let email = googleAccount.email;

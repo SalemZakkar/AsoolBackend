@@ -1,4 +1,4 @@
-import { MongoQuery } from "@casl/ability";
+import { accessibleFieldsBy } from "@casl/mongoose";
 import {
   DBNotFoundError,
   executeWithTransaction,
@@ -6,14 +6,22 @@ import {
   MongooseQuery,
 } from "../../core";
 import { FileService } from "../files";
-import { CategoryModel, StoreModel } from "../models";
+import { CategoryModel, IUser, StoreModel, UserRole } from "../models";
+import { UserService } from "../user";
+import { StoreUserShouldBeStoreOwnerError } from "./errors";
+import { StoreAction } from "./abilities";
 
 export class StoreService {
   service = new FileService();
+  userService = new UserService();
 
   create = async (data: any) => {
     let { ...input } = data;
     let categories: string[] = input.categories;
+    let user = await this.userService.getUser({ _id: data.owner });
+    if (user.role != UserRole.shop) {
+      throw new StoreUserShouldBeStoreOwnerError();
+    }
     for (let i = 0; i < categories.length; i++) {
       if (!(await CategoryModel.exists({ _id: categories[i] }))) {
         throw new DBNotFoundError();
@@ -56,7 +64,11 @@ export class StoreService {
     });
   };
 
-  getAll = async (params: MongooseQuery) => {
+  getAll = async (params: MongooseQuery,) => {
     return StoreModel.findAndCount(params);
   };
+
+  getMineStore = async (id: MongoId) => {
+    return await StoreModel.find({owner: id});
+  }
 }

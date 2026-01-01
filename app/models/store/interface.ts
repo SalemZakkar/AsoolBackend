@@ -7,5 +7,6 @@ export interface Store {
   phone: PhoneNumber;
   address: Address;
   categories?: MongoId[] | Category[];
-  image?: MongoId | null
+  image?: MongoId | null;
+  owner: MongoId,
 }

@@ -10,6 +10,12 @@ import { UserUpdateFields } from "../models/user/interface";
 export class UserController {
   private service = new UserService();
 
+  create = async (req: Request, res: Response) => {
+    let file = getFilesByFieldName(req, "avatar").at(0);
+    let user = await this.service.create({ file, ...req.body });
+    sendSuccessResponse({ res: res, data: user });
+  };
+
   getMine = async (req: Request, res: Response) => {
     let user = await this.service.getUser({ _id: req.userId });
     sendSuccessResponse({ res: res, data: user });

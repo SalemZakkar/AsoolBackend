@@ -1,8 +1,8 @@
 import { Exception } from "../errors";
 
 export class AccessUnAllowedError extends Exception {
-  constructor() {
-    super("Access Not Allowed", 401, "Access_Not_Allowed");
+  constructor(arg: any = undefined) {
+    super("Access Not Allowed", 403, "Access_Not_Allowed" , arg);
   }
 }
 

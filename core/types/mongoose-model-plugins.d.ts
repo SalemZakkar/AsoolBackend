@@ -9,7 +9,10 @@ declare module "mongoose" {
     TVirtuals = {},
     TSchema = any
   > {
-    findAndCount(params: MongooseQuery): Promise<{ total: number; data: T[] }>;
+    findAndCount(
+      params: MongooseQuery,
+      projection: any = undefined,
+    ): Promise<{ total: number; data: T[] }>;
 
     findByIdIfExists(params: any);
 

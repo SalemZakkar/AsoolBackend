@@ -3,6 +3,7 @@ import { UserController } from "./controller";
 import { multerFiles, validateJsonBody, validateJsonQuery } from "../../core";
 import {
   userChangePasswordValidator,
+  userCreateValidator,
   userGetValidator,
   userOtpSendValidator,
   userResetPasswordValidator,
@@ -28,7 +29,6 @@ userRouter.patch(
   validateJsonBody(userUpdateMineValidator),
   userController.updateMine
 );
-
 
 userRouter.post(
   "/mine/verifyEmail",
@@ -81,6 +81,15 @@ userRouter.get(
   permissionMiddleWare(UserAction.manage, "user"),
   validateJsonQuery(userGetValidator),
   userController.getByCriteria
+);
+
+userRouter.post(
+  "/",
+  protection,
+  permissionMiddleWare(UserAction.manage, "user"),
+  multerFiles("avatar"),
+  validateJsonBody(userCreateValidator),
+  userController.create
 );
 
 userRouter.patch(

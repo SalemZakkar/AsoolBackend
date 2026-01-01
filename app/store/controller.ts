@@ -6,6 +6,7 @@ import {
   sendSuccessResponse,
 } from "../../core";
 import { localizeConditions } from "../common";
+import { permittedFieldsOf } from "@casl/ability/extra";
 
 export class StoreController {
   service = new StoreService();
@@ -44,6 +45,9 @@ export class StoreController {
           raw: true,
           newName: "_id",
         },
+        owner: {
+          raw: true,
+        },
       },
     });
     query.conditions = localizeConditions(
@@ -53,7 +57,14 @@ export class StoreController {
     );
     sendSuccessResponse({
       res: res,
-      ...(await this.service.getAll(query)),
+      ...(await this.service.getAll(query,)),
+    });
+  };
+
+  getMineStores = async (req: Request, res: Response) => {
+    sendSuccessResponse({
+      res: res,
+      data: await this.service.getMineStore(req.user!._id!),
     });
   };
 }

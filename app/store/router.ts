@@ -29,10 +29,17 @@ storeRouter.get(
   controller.getAll
 );
 
+storeRouter.get(
+  "/mine",
+  protection,
+  permissionMiddleWare(StoreAction.getMineStores, "store"),
+  controller.getMineStores
+);
+
 storeRouter.patch(
   "/:id",
   protection,
-  permissionMiddleWare(StoreAction.manage, "store"),
+  permissionMiddleWare(StoreAction.edit, "store"),
   multerFiles("image"),
   validateJsonBody(validator.edit),
   localizedFieldsMiddleware("name"),

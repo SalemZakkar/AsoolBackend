@@ -9,7 +9,7 @@ import {
 } from "../../core/";
 import { hashPassword } from "../../core";
 import { OtpService } from "../otp/service";
-import { UserAlreadyVerifiedError, UserEmailInUserError } from "./errors";
+import { UserAlreadyVerifiedError, UserEmailInUserError, UserNotFoundError } from "./errors";
 import { FileService } from "../files";
 import { firebaseApp } from "../firebase";
 
@@ -19,6 +19,16 @@ export class UserService {
 
   createAccount = async (data: IUser) => {
     return UserModel.create(data);
+  };
+
+  create = async (data: any) => {
+    let { ...values } = data;
+    if (values.password) {
+      values.password = await hashPassword(values.password!, 10);
+    }
+    values.avatar = await this.fileService.saveFile(values.avatar);
+    values.isEmailVerified = true;
+    return await UserModel.create(values);
   };
 
   update = async (
@@ -33,7 +43,7 @@ export class UserService {
     let old = await UserModel.findByIdIfExists(id);
     values.avatar = await this.fileService.processSingleFileSwitch(
       values.avatar,
-      old.avatar,
+      old.avatar
     );
     return UserModel.findByIdAndUpdate(id, values, {
       new: true,
@@ -47,7 +57,7 @@ export class UserService {
   getUser = async (params: any) => {
     let res = await UserModel.findOne(params);
     if (!res) {
-      throw new DBNotFoundError();
+      throw new UserNotFoundError();
     }
     return res;
   };
@@ -70,7 +80,7 @@ export class UserService {
         otp: code,
         reason: OtpReason.VerifyEmail,
       });
-      let user = await this.update(
+      await this.update(
         id,
         {
           isEmailVerified: true,

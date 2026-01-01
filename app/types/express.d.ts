@@ -1,3 +1,4 @@
+import { Abilities } from "@casl/ability";
 import { IUser } from "../models";
 
 declare global {
@@ -8,7 +9,8 @@ declare global {
         | import("mongoose").ObjectId
         | null;
       user: IUser | null | undefined;
-      language: string
+      language: string;
+      abilities: Abilities | undefined;
     }
   }
 }

@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { localizedStringValidator } from "../common";
 import { fileValidator } from "../files";
-import { paginationJoiObject } from "../../core";
+import { paginationJoiObject, phoneValidator } from "../../core";
 
 export class StoreValidator {
   create = Joi.object({
@@ -12,13 +12,7 @@ export class StoreValidator {
       "image/jpg",
     ]).allow(null),
     categories: Joi.array().items(Joi.string().required()).min(1).required(),
-    phone: Joi.alternatives(
-      Joi.object({
-        code: Joi.string(),
-        phone: Joi.string(),
-      }).and("code", "phone"),
-      Joi.valid(null)
-    ),
+    phone: phoneValidator({ required: true }),
     address: Joi.object({
       address: localizedStringValidator,
       position: Joi.alternatives(
@@ -28,7 +22,8 @@ export class StoreValidator {
         }).required()
       ).required(),
     }).required(),
-  });
+    owner: Joi.string().required(),
+  }).unknown(false);
 
   edit = Joi.object({
     name: localizedStringValidator,
@@ -38,20 +33,15 @@ export class StoreValidator {
       "image/jpg",
     ]).allow(null),
     categories: Joi.array().items(Joi.string().required()).min(1),
-    phone: Joi.alternatives(
-      Joi.object({
-        code: Joi.string(),
-        phone: Joi.string(),
-      }).and("code", "phone"),
-      Joi.valid(null)
-    ),
+    phone: phoneValidator(),
+
     address: Joi.object({
       address: localizedStringValidator,
       position: Joi.alternatives(
         Joi.object({
           lat: Joi.number(),
           lng: Joi.number(),
-        }).and("lat" , "lng")
+        }).and("lat", "lng")
       ),
     }),
   });
@@ -60,6 +50,7 @@ export class StoreValidator {
     ...paginationJoiObject,
     name: Joi.string(),
     id: Joi.string(),
+    owner: Joi.string(),
     categories: Joi.array().items(Joi.string().required()).min(1),
   });
 }

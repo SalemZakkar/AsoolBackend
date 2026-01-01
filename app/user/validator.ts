@@ -20,6 +20,22 @@ export const userUpdateValidator = Joi.object({
     firebaseId: Joi.string(),
 }).unknown(false);
 
+export const userCreateValidator = Joi.object({
+    name: Joi.string().required(),
+    phone: Joi.alternatives(
+        Joi.object({
+            code: Joi.string(),
+            phone: Joi.string(),
+        }).and("code", "phone"),
+        Joi.valid(null)
+    ),
+    email: Joi.string().email().required(),
+    role: Joi.string().valid(...Object.values(UserRole)).required(),
+    avatar: fileValidator(10 * 1024 * 1000, ["image/jpeg", "image/png", "image/jpg"]).allow(null),
+    password: Joi.string().required(),
+    firebaseId: Joi.string(),
+}).unknown(false);
+
 export const userUpdateMineValidator = Joi.object({
     name: Joi.string(),
     phone: Joi.alternatives(

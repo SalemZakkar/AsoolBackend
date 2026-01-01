@@ -5,19 +5,18 @@ import { MongoId } from "./utils";
 
 export const findAndCount = function (schema: mongoose.Schema, options: any) {
   schema.statics.findAndCount = async function findAndCount(
-    params: MongooseQuery
+    params: MongooseQuery,
+    projection: any = undefined
   ) {
     let queries = [];
     if (params.total) {
-      queries.push(
-        this.countDocuments(params.conditions, { session: options })
-      );
+      queries.push(this.countDocuments(params.conditions));
     } else {
       queries.push(undefined);
     }
     if (params.data) {
       queries.push(
-        this.find(params.conditions ?? {})
+        this.find(params.conditions ?? {}, projection)
           .sort(params.sort)
           .skip(params.skip)
           .limit(params.limit)
